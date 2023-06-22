@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <header>
+        <h1>Welcome to Foddies !!!</h1>
+    </header>
+    <!-- Search bar -->
+    <div class="main">
+        <form method="GET" action="{% url 'home-page' %}">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="{% if query%}{{query}}{%else%}Explore Food Items{% endif %}">
+                <div class="input-group-append">
+                  <button class="btn btn-secondary">
+                    <i class="fa fa-search">Search</i>
+                  </button>
+                </div>
+            </div>
+        </form>
+ 
+    </div>
+
+    <!-- Dishes 100 per page -->
+    <div class="cards">
+        {% for item in food_items %}
+        <article class="information [ card ]">
+            <span class="tag">Rating : {% if item.restaurant.average_rating %}{{item.restaurant.average_rating}} / 5 {% else %}Not available{% endif %}</span>
+            <h2 class="title">{{item.name}}</h2>
+            <p class="info">Price : &#8377 {{item.price}}</p>
+            <p class="info">Restaurant : {{item.restaurant}}</p>
+            <a href="{% url 'restaurant' item.restaurant_id%}">
+                <button class="button" >
+                    <span>View Menu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="none">
+                        <path d="M0 0h24v24H0V0z" fill="none" />
+                        <path d="M16.01 11H4v2h12.01v3L20 12l-3.99-4v3z" fill="currentColor" />
+                    </svg>
+                </button>
+            </a>
+        </article>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="div_top_hypers">
+        <ul class="ul_top_hypers">
+            {% if food_items.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?{% if query %}q={{query}}&{% endif %}page={{ food_items.previous_page_number }}"><span>< Previous</span></a>
+                </li>
+            {% endif %}
+        
+            {% if food_items.number|add:'-4' > 1 %}
+                <li class="page-item"><a class="page-link" href="?{% if query %}q={{query}}&{% endif %}page={{ food_items.number|add:'-5' }}"><span>&hellip;</span></a></li>
+            {% endif %}
+        
+            {% for i in food_items.paginator.page_range %}
+                {% if food_items.number == i %}
+                 
+                    <li class="page-item"><span style="color:#000">{{i}}</span></li>
+
+                {% elif i > food_items.number|add:'-5' and i < food_items.number|add:'5' %}
+                   <li class="page-item"><a class="page-link" href="?{% if query%}q={{query}}&{% endif %}page={{ i }}"><span>{{i}}</span></a></li>
+                {% endif %}
+            {% endfor %}
+        
+            {% if food_items.paginator.num_pages > food_items.number|add:'4' %}
+                <li class="page-item"><a class="page-link" href="?{% if query%}q={{query}}&{% endif %}page={{ food_items.number|add:'5' }}"><span>&hellip;</span></a></li>
+            {% endif %}
+        
+            {% if food_items.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?{% if query%}q={{query}}&{% endif %}page={{ food_items.next_page_number }}"><span>Next ></span></a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}

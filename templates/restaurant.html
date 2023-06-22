@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form >
+    <input class='button' type="button" value="Back to Home!" onclick="history.back()">
+</form>
+
+<header>
+    <h1>Menu of "{{restaurant.name}}"</h1>
+</header>
+
+<!-- Restaurant Info -->
+<div class = "rest_info">
+    {% if restaurant.average_rating %}
+    <p>Average Rating : {{restaurant.average_rating}}</p>
+    <p>Total Reviews :  {{restaurant.total_reviews}}</p>
+    {% endif %}
+    <p>Location : {{restaurant.area}}, Bangalore</p>
+    {% if restaurant.online_delivery %}
+    <p>
+        Online delivery is available
+    </p>
+    {% endif %}
+    {% if restaurant.table_booking %}
+    <p>
+        Table booking is available
+    </p>
+    {% endif %}
+    {% if restaurant.table_reservation_supported %}
+    <p>
+        Table reservation is available
+    </p>
+    {% endif %}
+    {% if not restaurant.delivering_now %}
+    <p>
+        Delivery option is not available at this moment
+    </p>
+    {% endif %}
+    {% if restaurant.average_cost_for_2 %}
+    <p>
+        Average price {{restaurant.average_cost_for_2}} for 2 
+    </p>
+    {% endif %}
+
+    {% if cuisines %}
+    <p> 
+        Available Cuisines: 
+        {% for cuisine in cuisines %}
+            {{cuisine.name}},
+        {% endfor %}
+        
+    </p>
+    {% endif %}
+</div>
+
+<!-- Restuarant Menu -->
+<div class="cards">
+    {% for item in food_items %}
+    <article class="information [ card ]">
+        <h2 class="title">{{item.name}}</h2>
+        <p class="info">Price : &#8377 {{item.price}}</p>
+    </article>
+    {% endfor %}
+</div>
+
+{% endblock %}
