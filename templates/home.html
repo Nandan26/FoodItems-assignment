@@ -23,10 +23,10 @@
     <div class="cards">
         {% for item in food_items %}
         <article class="information [ card ]">
-            <span class="tag">Rating : {% if item.restaurant.average_rating %}{{item.restaurant.average_rating}} / 5 {% else %}Not available{% endif %}</span>
+            <span class="tag">Rating : {% if item.restaurant__average_rating %}{{item.restaurant__average_rating}} / 5 {% else %}Not available{% endif %}</span>
             <h2 class="title">{{item.name}}</h2>
             <p class="info">Price : &#8377 {{item.price}}</p>
-            <p class="info">Restaurant : {{item.restaurant}}</p>
+            <p class="info">Restaurant : {{item.restaurant__name}}</p>
             <a href="{% url 'restaurant' item.restaurant_id%}">
                 <button class="button" >
                     <span>View Menu</span>
